@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda de Productos por Estado - ENSIGNA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6">Búsqueda de Productos por Estado</h1>
+
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <form id="searchForm" class="mb-4">
+                <div class="flex items-center">
+                    <select id="estadoProducto" class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-2">
+                        <option value="">Seleccione un estado</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="resuelto">Resuelto</option>
+                    </select>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Buscar
+                    </button>
+                </div>
+            </form>
+
+            <div id="resultados" class="hidden">
+                <h2 class="text-xl font-semibold mb-2">Resultados de la búsqueda:</h2>
+                <table class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Nombre del Producto</th>
+                            <th class="px-4 py-2">Estado</th>
+                            <th class="px-4 py-2">Información Adicional</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultadosTabla">
+                        <!-- Los resultados se cargarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="noResultados" class="hidden text-red-500 font-bold">
+                No se encontraron productos con el estado solicitado.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const productos = [
+            { nombre: "Lavadora Model X", estado: "pendiente", info: "Reportada el 10/10/2024" },
+            { nombre: "Nevera FrostFree", estado: "resuelto", info: "Reparada el 12/10/2024" },
+            { nombre: "Microondas QuickHeat", estado: "pendiente", info: "En espera de repuestos" },
+            { nombre: "Lavavajillas Eco", estado: "resuelto", info: "Cliente satisfecho" }
+        ];
+
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const estado = document.getElementById('estadoProducto').value;
+            buscarProductos(estado);
+        });
+
+        function buscarProductos(estado) {
+            const resultados = productos.filter(producto => producto.estado === estado);
+            const resultadosDiv = document.getElementById('resultados');
+            const noResultadosDiv = document.getElementById('noResultados');
+            const resultadosTabla = document.getElementById('resultadosTabla');
+
+            resultadosTabla.innerHTML = '';
+
+            if (resultados.length > 0) {
+                resultados.forEach(producto => {
+                    const fila = document.createElement('tr');
+                    fila.innerHTML = `
+                        <td class="border px-4 py-2">${producto.nombre}</td>
+                        <td class="border px-4 py-2">${producto.estado}</td>
+                        <td class="border px-4 py-2">${producto.info}</td>
+                    `;
+                    resultadosTabla.appendChild(fila);
+                });
+                resultadosDiv.classList.remove('hidden');
+                noResultadosDiv.classList.add('hidden');
+            } else {
+                resultadosDiv.classList.add('hidden');
+                noResultadosDiv.classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

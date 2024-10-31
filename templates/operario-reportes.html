@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes de Productos - ENSIGNA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="content mb-8">
+            <h1 class="text-3xl font-bold mb-4">Bienvenido, Operario</h1>
+            <div class="flex space-x-4">
+                <a href="/templates/operario-reportes.html" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Gestionar Reportes de Productos</a>
+                <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cerrar sesión</a>
+            </div>
+        </div>
+
+        <h1 class="text-3xl font-bold mb-6">Reportes de Productos</h1>
+        
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <h2 class="text-xl font-semibold mb-4">Nuevo Reporte</h2>
+            <form id="reporteForm">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="idProducto">
+                        ID del Producto
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="idProducto" type="text" placeholder="ID del Producto" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="defecto">
+                        Defecto del Producto
+                    </label>
+                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="defecto" placeholder="Descripción del defecto" required></textarea>
+                </div>
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Enviar Reporte
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <h2 class="text-xl font-semibold mb-4">Listado de Reportes</h2>
+            <table class="min-w-full">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">ID Producto</th>
+                        <th class="px-4 py-2">Defecto</th>
+                        <th class="px-4 py-2">Estado</th>
+                        <th class="px-4 py-2">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="listaReportes">
+                    <!-- Los reportes se cargarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('reporteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const idProducto = document.getElementById('idProducto').value;
+            const defecto = document.getElementById('defecto').value;
+            agregarReporte(idProducto, defecto);
+            this.reset();
+        });
+
+        function agregarReporte(idProducto, defecto) {
+            const listaReportes = document.getElementById('listaReportes');
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td class="border px-4 py-2">${idProducto}</td>
+                <td class="border px-4 py-2">${defecto}</td>
+                <td class="border px-4 py-2">Pendiente</td>
+                <td class="border px-4 py-2">
+                    <button onclick="confirmarDefecto(this)" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded mr-2">Confirmar</button>
+                    <button onclick="rechazarDefecto(this)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Rechazar</button>
+                </td>
+            `;
+            listaReportes.appendChild(fila);
+        }
+
+        function confirmarDefecto(btn) {
+            const fila = btn.closest('tr');
+            fila.cells[2].textContent = 'Confirmado - A reparación';
+            btn.parentNode.innerHTML = 'Enviado a reparación';
+        }
+
+        function rechazarDefecto(btn) {
+            const fila = btn.closest('tr');
+            fila.cells[2].textContent = 'Rechazado - No validado';
+            btn.parentNode.innerHTML = 'Reporte no validado';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Reportes</title>
+    <style>
+        /* Estilos del header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.admin-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #e8f1ff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #000000; /* Cambiado a negro */
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 900; /* Peso de fuente más grueso */
+            text-transform: uppercase; /* Texto en mayúsculas para más énfasis */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="https://pbs.twimg.com/media/GaA3DIPXYAAVyKV.jpg" alt="Logo" class="logo-img">
+            <span>ENSIGNA</span>
+        </div>
+        <div class="admin-label">ADMINISTRADOR - CREAR REPORTE</div>
+    </header>
+
+    <div class="form-container">
+        <form id="create-report-form">
+            <!-- Campo para el ID del Producto -->
+            <label for="product-id">ID del Producto:</label>
+            <input type="text" id="product-id" name="product-id" placeholder="Ingrese el ID del producto" required>
+
+            <!-- Campo para seleccionar el Tipo de Defecto -->
+            <label for="defect-type">Tipo de Defecto:</label>
+            <select id="defect-type" name="defect-type" required>
+                <option value="" disabled selected>Seleccione el tipo de defecto</option>
+                <option value="fabricacion">Fabricación</option>
+                <option value="material">Material</option>
+                <option value="diseno">Diseño</option>
+            </select>
+
+            <!-- Campo para la descripción del Producto -->
+            <label for="model">Descripción del defecto:</label>
+            <input type="text" id="defect" name="defect" placeholder="Describa el defecto del producto" required>
+
+            <!-- Campo para seleccionar el estado del Producto -->
+            <label for="product-state">Estado del Producto:</label>
+            <select id="product-state" name="product-state" required>
+                <option value="" disabled selected>Seleccione el Estado del producto</option>
+                <option value="reparable">Reparable</option>
+                <option value="revision-adicional">Necesita Revisión Adicional</option>
+                <option value="no-reparable">No Reparable</option>
+            </select>
+
+            
+            <!-- Botón para Enviar el Formulario -->
+            <button type="submit">Crear Reporte</button>
+        </form>
+
+        <!-- Contenedor para los mensajes de éxito o error -->
+        <div id="message-container" class="message"></div>
+    </div>
+</body>
+</html>

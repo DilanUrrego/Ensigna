@@ -38,9 +38,11 @@ class ControladorFiltrado:
                 
                 # Consulta base
                 query = """
-                    SELECT DISTINCT p.id, p.tipo_producto, p.modelo, p.num_serie, r.tipo_defecto 
-                    FROM productos p 
-                    LEFT JOIN reportes r ON p.id = r.producto_id
+                    SELECT DISTINCT 
+                        p.id, p.tipo_producto, p.modelo, p.num_serie, 
+                        COALESCE(r.tipo_defecto, 'Sin defectos reportados') AS tipo_defecto
+                    FROM productos p
+                    LEFT JOIN reportes r ON p.id = r.id_producto
                 """
                 
                 # Agregar condiciones según los filtros proporcionados
@@ -71,7 +73,7 @@ class ControladorFiltrado:
                         'tipo_producto': producto[1],
                         'modelo': producto[2],
                         'num_serie': producto[3],
-                        'tipo_defecto': producto[4] if producto[4] else "Sin defectos reportados"
+                        'tipo_defecto': producto[4]
                     })
                 
                 return resultado

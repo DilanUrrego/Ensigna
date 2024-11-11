@@ -222,9 +222,9 @@ def obtener_producto():
         print(f"Error en obtener_producto: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/filtrar-productos')
+@app.route('/filtrado_productos')
 @login_required
-def filtrar_productos_view():
+def filtrado_productos_view():
     return render_template('filtrado_productos.html')
 
 @app.route('/api/filtrar-productos', methods=['POST'])

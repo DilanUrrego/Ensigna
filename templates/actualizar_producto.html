@@ -21,7 +21,6 @@
             box-sizing: border-box;
         }
 
-        /* Estilos del encabezado */
         .header {
             display: flex;
             justify-content: space-between;
@@ -118,24 +117,18 @@
             border: 1px solid #f5c6cb;
         }
 
-        .products-list {
-            margin-top: 30px;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
+        .form-disabled {
+            background-color: #f0f0f0;
+            pointer-events: none;
         }
 
-        .products-list h2 {
-            color: white;
-            margin-bottom: 15px;
+        #search-button {
+            margin-top: 10px;
+            margin-bottom: 20px;
         }
 
-        .product-item {
-            background-color: white;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            color: black;
+        .hidden {
+            display: none;
         }
 
         @media (max-width: 600px) {
@@ -159,65 +152,102 @@
     </header>
 
     <div class="container">
-        <form id="update-product-form">
+        <div class="search-section">
             <label for="product-id">ID del Producto:</label>
             <input type="text" id="product-id" required />
-        
+            <button type="button" id="search-button">Buscar Producto</button>
+        </div>
+
+        <form id="update-product-form" class="hidden">
             <label for="tipo-producto">Tipo de Producto:</label>
-            <input type="text" id="tipo-producto" />
+            <input type="text" id="tipo-producto" placeholder="Dejar vacío para mantener valor actual"/>
         
             <label for="modelo">Modelo:</label>
-            <input type="text" id="modelo" />
+            <input type="text" id="modelo" placeholder="Dejar vacío para mantener valor actual"/>
         
             <label for="num-serie">Número de Serie:</label>
-            <input type="text" id="num-serie" />
+            <input type="text" id="num-serie" placeholder="Dejar vacío para mantener valor actual"/>
         
             <button type="submit" id="update-product-btn">Actualizar Producto</button>
         </form>
         
-        <p id="update-message"></p>
-
-        <div class="products-list">
-            <h2>Lista de Productos Actualizados</h2>
-            <div id="productsList"></div>
-        </div>
+        <div id="message" class="message"></div>
     </div>
 
     <script>
-       // JavaScript
-document.getElementById("update-product-btn").addEventListener("submit", async function() {
-    event.preventDefault();
-    const productId = document.getElementById("product-id").value;
-    const tipoProducto = document.getElementById("tipo-producto").value;
-    const modelo = document.getElementById("modelo").value;
-    const numSerie = document.getElementById("num-serie").value;
+        document.getElementById("search-button").addEventListener("click", async function() {
+            const productId = document.getElementById("product-id").value;
+            if (!productId) {
+                showMessage("Por favor, ingrese un ID de producto", "error");
+                return;
+            }
 
-    try {
-        const response = await fetch('/actualizar_producto', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                id: productId,
-                tipoProducto: tipoProducto,
-                modelo: modelo,
-                num_serie: numSerie
-            })
+            try {
+                const response = await fetch('/obtener_producto', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id_producto: productId })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById("update-product-form").classList.remove("hidden");
+                    document.getElementById("tipo-producto").placeholder = data.tipo_producto;
+                    document.getElementById("modelo").placeholder = data.modelo;
+                    document.getElementById("num-serie").placeholder = data.num_serie;
+                    
+                    showMessage("Producto encontrado. Modifique los campos que desee actualizar.", "success");
+                } else {
+                    showMessage("Producto no encontrado", "error");
+                }
+            } catch (error) {
+                showMessage("Error al buscar el producto", "error");
+                console.error(error);
+            }
         });
 
-        const result = await response.json();
-        if (result.success) {
-            document.getElementById("update-message").textContent = "Producto actualizado correctamente.";
-        } else {
-            document.getElementById("update-message").textContent = "Error al actualizar el producto: " + result.message;
-        }
-    } catch (error) {
-        console.error("Error al actualizar el producto:", error);
-        document.getElementById("update-message").textContent = "Hubo un problema al actualizar el producto.";
-    }
-});
+        document.getElementById("update-product-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const productId = document.getElementById("product-id").value;
+            const tipoProducto = document.getElementById("tipo-producto").value;
+            const modelo = document.getElementById("modelo").value;
+            const numSerie = document.getElementById("num-serie").value;
 
+            const updateData = new FormData();
+            updateData.append('product-id', productId);
+            if (tipoProducto) updateData.append('tipo-producto', tipoProducto);
+            if (modelo) updateData.append('modelo', modelo);
+            if (numSerie) updateData.append('num-serie', numSerie);
+
+            try {
+                const response = await fetch('/actualizar_producto', {
+                    method: 'POST',
+                    body: updateData
+                });
+
+                if (response.redirected) {
+                    window.location.href = response.url;
+                } else {
+                    showMessage("Producto actualizado correctamente", "success");
+                }
+            } catch (error) {
+                showMessage("Error al actualizar el producto", "error");
+                console.error(error);
+            }
+        });
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById("message");
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = "block";
+            
+            setTimeout(() => {
+                messageDiv.style.display = "none";
+            }, 5000);
+        }
     </script>
 </body>
 </html>

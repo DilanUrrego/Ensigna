@@ -3,62 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Reportes</title>
+    <title>Reporte de Productos</title>
     <style>
-        /* Estilos del header */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    display: flex;
-    align-items: center;
-}
-
-.logo-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.admin-label {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
         body, html {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #e8f1ff;
+            background-color: #3F5D79;
+            min-height: 100vh;
         }
 
         .container {
+            width: 100%;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+
+        /* Estilos del encabezado */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333; 
+            text-transform: capitalize;
         }
 
         h1 {
+            color: white;
             text-align: center;
-            color: #000000; /* Cambiado a negro */
             margin-bottom: 30px;
-            font-size: 32px;
-            font-weight: 900; /* Peso de fuente más grueso */
-            text-transform: uppercase; /* Texto en mayúsculas para más énfasis */
         }
 
         .form-group {
@@ -68,19 +66,19 @@
         label {
             display: block;
             margin-bottom: 5px;
+            color: white;
             font-weight: bold;
-            color: #333;
         }
 
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
+        input, textarea, select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
+            box-sizing: border-box;
+            background-color: white;
+            color: black;
         }
 
         textarea {
@@ -94,31 +92,19 @@
         }
 
         .btn {
-            padding: 12px 30px;
-            border: none;
+            background-color: #1E3A5F;
+            color: white;
+            padding: 12px 24px;
+            border: 2px solid white;
             border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
-            margin: 0 10px;
-            transition: all 0.3s ease;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 200px;
         }
 
-        .btn-primary {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #45a049;
-        }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #5a6268;
+        .btn:hover {
+            background-color: #152943;
         }
 
         .status-message {
@@ -140,52 +126,104 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="logo">
-            <img src="https://pbs.twimg.com/media/GaA3DIPXYAAVyKV.jpg" alt="Logo" class="logo-img">
+            <img src="https://pbs.twimg.com/media/GaA3DIPXYAAVyKV.jpg" alt="Logo">
             <span>ENSIGNA</span>
         </div>
-        <div class="admin-label">ADMINISTRADOR - CREAR REPORTE</div>
+        <div class="title">Reportes de Producto</div>
     </header>
 
-    <div class="form-container">
-        <form id="create-report-form">
-            <!-- Campo para el ID del Producto -->
-            <label for="product-id">ID del Producto:</label>
-            <input type="text" id="product-id" name="product-id" placeholder="Ingrese el ID del producto" required>
+    <div class="container">
+        <form id="reporteForm" onsubmit="enviarReporte(event)">
+            <div class="form-group">
+                <label for="idProducto">ID del Producto:</label>
+                <input type="text" id="idProducto" name="idProducto" required>
+            </div>
 
-            <!-- Campo para seleccionar el Tipo de Defecto -->
-            <label for="defect-type">Tipo de Defecto:</label>
-            <select id="defect-type" name="defect-type" required>
-                <option value="" disabled selected>Seleccione el tipo de defecto</option>
-                <option value="fabricacion">Fabricación</option>
-                <option value="material">Material</option>
-                <option value="diseno">Diseño</option>
-            </select>
+            <div class="form-group">
+                <label for="nombreProducto">Nombre del Producto:</label>
+                <input type="text" id="nombreProducto" name="nombreProducto" required>
+            </div>
 
-            <!-- Campo para la descripción del Producto -->
-            <label for="model">Descripción del defecto:</label>
-            <input type="text" id="defect" name="defect" placeholder="Describa el defecto del producto" required>
+            <div class="form-group">
+                <label for="tipoDefecto">Tipo de Defecto:</label>
+                <select id="tipoDefecto" name="tipoDefecto" required>
+                    <option value="">Seleccione el tipo de defecto</option>
+                    <option value="defecto_fabricacion">Defecto de Fabricación</option>
+                    <option value="defecto_material">Defecto de Material</option>
+                    <option value="defecto_diseno">Defecto de Diseño</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
 
-            <!-- Campo para seleccionar el estado del Producto -->
-            <label for="product-state">Estado del Producto:</label>
-            <select id="product-state" name="product-state" required>
-                <option value="" disabled selected>Seleccione el Estado del producto</option>
-                <option value="reparable">Reparable</option>
-                <option value="revision-adicional">Necesita Revisión Adicional</option>
-                <option value="no-reparable">No Reparable</option>
-            </select>
+            <div class="form-group">
+                <label for="descripcion">Descripción del Defecto:</label>
+                <textarea id="descripcion" name="descripcion" required></textarea>
+            </div>
 
-            
-            <!-- Botón para Enviar el Formulario -->
-            <button type="submit">Crear Reporte</button>
+            <div class="form-group">
+                <label for="estadoProducto">Estado del Producto:</label>
+                <select id="estadoProducto" name="estadoProducto" required>
+                    <option value="">Seleccione el estado</option>
+                    <option value="reparable">Reparable</option>
+                    <option value="no_reparable">No Reparable</option>
+                    <option value="revision_adicional">Necesita Revisión Adicional</option>
+                </select>
+            </div>
+
+            <div class="btn-container">
+                <button type="submit" class="btn">Confirmar Reporte</button>
+            </div>
         </form>
 
-        <!-- Contenedor para los mensajes de éxito o error -->
-        <div id="message-container" class="message"></div>
+        <div id="statusMessage" class="status-message"></div>
     </div>
+
+    <script>
+        // Reemplazar la función enviarReporte existente
+function enviarReporte(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const statusMessage = document.getElementById('statusMessage');
+    
+    fetch('/crear_reporte', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            statusMessage.textContent = data.mensaje;
+            statusMessage.className = 'status-message success';
+            statusMessage.style.display = 'block';
+            event.target.reset();
+        } else {
+            statusMessage.textContent = 'Error: ' + data.error;
+            statusMessage.className = 'status-message error';
+            statusMessage.style.display = 'block';
+        }
+    })
+    .catch(error => {
+        statusMessage.textContent = 'Error al enviar el reporte: ' + error;
+        statusMessage.className = 'status-message error';
+        statusMessage.style.display = 'block';
+    });
+}
+    </script>
 </body>
 </html>

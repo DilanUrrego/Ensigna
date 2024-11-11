@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtrar Productos</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #e8f1ff;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilos para los resultados */
+        .results-container {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .product-card {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .product-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .product-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .product-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="https://pbs.twimg.com/media/GaA3DIPXYAAVyKV.jpg" alt="Logo" class="logo-img">
+            <span>ENSIGNA</span>
+        </div>
+        <div class="admin-label">ADMINISTRADOR</div>
+    </header>
+    <div class="container">
+        <h1>Filtrar Productos</h1>
+        
+        <form id="filtroForm">
+            <div class="form-group">
+                <label for="numeroSerie">Número de Serie:</label>
+                <input type="text" id="numeroSerie" name="numeroSerie">
+            </div>
+
+            <div class="form-group">
+                <label for="tipoDefecto">Tipo de Defecto:</label>
+                <select id="tipoDefecto" name="tipoDefecto">
+                    <option value="">Seleccione el tipo de defecto</option>
+                    <option value="defecto_fabricacion">Defecto de Fabricación</option>
+                    <option value="defecto_material">Defecto de Material</option>
+                    <option value="defecto_diseno">Defecto de Diseño</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="tipoProducto">Tipo de Producto:</label>
+                <select id="tipoProducto" name="tipoProducto">
+                    <option value="">Seleccione el tipo de producto</option>
+                    <option value="lavadora">Lavadora</option>
+                    <option value="nevera">Nevera</option>
+                </select>
+            </div>
+
+            <div class="btn-container">
+                <button type="submit" class="btn">Aplicar Filtro</button>
+            </div>
+        </form>
+
+        <div id="results" class="results-container">
+            <!-- Aquí se mostrarán los resultados -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('filtroForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const numeroSerie = document.getElementById('numeroSerie').value;
+            const tipoDefecto = document.getElementById('tipoDefecto').value;
+            const tipoProducto = document.getElementById('tipoProducto').value;
+
+            try {
+                const response = await fetch('/api/filtrar-productos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        numeroSerie,
+                        tipoDefecto,
+                        tipoProducto
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+
+                const productos = await response.json();
+                mostrarResultados(productos);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('results').innerHTML = `
+                    <div class="no-results">
+                        <p>Error al filtrar productos: ${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+
+        function mostrarResultados(productos) {
+            const resultsContainer = document.getElementById('results');
+            
+            if (!productos || productos.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <p>No se encontraron productos con los filtros especificados.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            resultsContainer.innerHTML = productos.map(producto => `
+                <div class="product-card">
+                    <h3>Producto #${producto.id}</h3>
+                    <div class="product-info">
+                        <p><strong>Tipo:</strong> ${producto.tipo_producto}</p>
+                        <p><strong>Modelo:</strong> ${producto.modelo}</p>
+                        <p><strong>Número de Serie:</strong> ${producto.num_serie}</p>
+                        <p><strong>Tipo de Defecto:</strong> ${producto.tipo_defecto}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

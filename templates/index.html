@@ -8,146 +8,147 @@
     
     <style>
         * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    text-decoration: none;
-}
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            text-decoration: none;
+        }
 
-/* Estilos del header */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-}
+        /* Estilos del header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
 
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    display: flex;
-    align-items: center;
-}
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
 
-.logo-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
 
-.header-buttons a {
-    margin-left: 20px;
-    font-size: 14px;
-    text-decoration: none;
-}
+        .header-buttons a {
+            margin-left: 20px;
+            font-size: 14px;
+            text-decoration: none;
+        }
 
-.register-btn {
-    background-color: #3F5D79;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    text-transform: uppercase;
-}
+        .register-btn {
+            background-color: #3F5D79;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
 
-.login-btn {
-    color: #3F5D79;
-}
+        .login-btn {
+            color: #3F5D79;
+        }
 
-/* Sección principal */
-.main-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 50px;
-    background: url('https://cdn.discordapp.com/attachments/1218594696398504047/1300863282856329247/freepik__candid-image-photography-natural-textures-highly-r__554.jpeg?ex=672262d7&is=67211157&hm=98783dc5603bf058b11614dbb6f835d039eb0b79fbd14dcaec1939cf127eaa79&') no-repeat center center/cover;
-    color: white;
-    height: 100vh;
-    position: relative;
-}
+        /* Sección principal */
+        .main-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            background: url('https://cdn.discordapp.com/attachments/1218594696398504047/1300863282856329247/freepik__candid-image-photography-natural-textures-highly-r__554.jpeg?ex=672262d7&is=67211157&hm=98783dc5603bf058b11614dbb6f835d039eb0b79fbd14dcaec1939cf127eaa79&') no-repeat center center/cover;
+            color: white;
+            height: 100vh;
+            position: relative;
+        }
 
-.main-section::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro para mejor contraste */
-    z-index: 1;
-}
+        .main-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Fondo oscuro para mejor contraste */
+            z-index: 1;
+        }
 
-.main-image {
-    position: relative;
-    z-index: 2;
-}
+        .main-image {
+            position: relative;
+            z-index: 2;
+        }
 
-.main-content {
-    max-width: 500px;
-    margin-left: 60vh;
-    position: relative;
-    z-index: 2;
-}
+        .main-content {
+            max-width: 500px;
+            margin-left: 60vh;
+            position: relative;
+            z-index: 2;
+        }
 
-.main-content h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-}
+        .main-content h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
 
-.main-content p {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
+        .main-content p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
 
-.start-btn {
-    background-color: #CCE4F9;
-    color: #3F5D79;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 10px;
-    z-index: 2;
-}
+        .start-btn {
+            background-color: #CCE4F9;
+            color: #3F5D79;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            z-index: 2;
+        }
 
-.start-btn-a{
-    color: #3F5D79
-}
-/* Sección de información */
-.info-section {
-    display: flex;
-    justify-content: space-around;
-    padding: 40px 20px;
-    background-color: #CCE4F9;
-    text-align: center;
-}
+        .start-btn-a {
+            color: #3F5D79;
+        }
 
-.info-box {
-    width: 30%;
-}
+        /* Sección de información */
+        .info-section {
+            display: flex;
+            justify-content: space-around;
+            padding: 40px 20px;
+            background-color: #CCE4F9;
+            text-align: center;
+        }
 
-.info-box h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #333;
-}
+        .info-box {
+            width: 30%;
+        }
 
-.info-box ul {
-    list-style-type: none;
-}
+        .info-box h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
 
-.info-box li {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 5px;
-}
+        .info-box ul {
+            list-style-type: none;
+        }
 
+        .info-box li {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 5px;
+        }
     </style>
+    
 </head>
 <body>
     <!-- Header con el logo y los botones de registro y login -->
@@ -156,8 +157,8 @@
             <img src="https://pbs.twimg.com/media/GaA3DIPXYAAVyKV.jpg" alt="ENSIGNA Logo" class="logo-img"> ENSIGNA
         </div>
         <div class="header-buttons">
-            <a href="register" class="register-btn">REGISTRARSE</a>
-            <a href="login" class="login-btn">INICIAR SESIÓN</a>
+            <a href="{{ url_for('crear_usuario') }}" class="register-btn">REGISTRARSE</a>
+            <a href="{{ url_for('login') }}" class="login-btn">INICIAR SESIÓN</a>
         </div>
     </header>
 
@@ -171,8 +172,7 @@
             <p>Este sistema permite que los operarios puedan evaluar productos en tiempo real con el apoyo de un modelo de inteligencia artificial.</p>
             <p>Además, los administradores de calidad tienen la capacidad de gestionar el inventario y tomar decisiones correctivas rápidamente.</p>
             <p>El sistema también emite reportes y notificaciones para mantener informados a los responsables.</p>
-            <button class="start-btn"><a href="login" class="start-btn-a">INICIAR <i class="fas fa-wrench"></i></a> </button>
-    
+            <button class="start-btn"><a href="{{ url_for('login') }}" class="start-btn-a">INICIAR <i class="fas fa-wrench"></i></a></button>
         </div>
     </section>
 

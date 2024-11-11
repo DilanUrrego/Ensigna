@@ -1,5 +1,6 @@
-PGHOST='ep-cold-frog-a8w87qt3.eastus2.azure.neon.tech'
-PGDATABASE='neondb'
-PGUSER='neondb_owner'
-PGPASSWORD='a5VOqSkILt7y'
-PGPORT = 5432
+class SecretConfig:
+    PGHOST = 'ep-winter-brook-a56kt9iq.us-east-2.aws.neon.tech'
+    PGDATABASE = 'neondb'
+    PGUSER = 'neondb_owner'
+    PGPASSWORD = '4ZiXSroyH0MV'
+    PGPORT = 5432

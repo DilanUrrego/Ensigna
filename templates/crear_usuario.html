@@ -87,40 +87,47 @@
     <div id="resultado"></div>
     <script>
         function capturar_datos(event) {
-            event.preventDefault(); // Evita el envío tradicional del formulario
+            event.preventDefault();
         
-            // Crear un FormData a partir del formulario
-            let formData = new FormData(event.target);
+            const form = event.target;
+            const formData = new FormData(form);
         
-            // Enviar los datos al servidor Flask usando fetch
+            // Verificar que las contraseñas coinciden
+            if (formData.get('contrasena') !== formData.get('confirmacion-contrasena')) {
+                document.getElementById('resultado').innerHTML = 
+                    '<p style="color: red;">Las contraseñas no coinciden</p>';
+                return;
+            }
+        
             fetch('/crear_usuario', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => {
-                // Verifica si la respuesta es válida
-                if (!response.ok) {
-                    throw new Error('Error de respuesta del servidor');
-                }
-                return response.json();  // Asegurarse de que sea JSON
-            })
+            .then(response => response.json())
             .then(data => {
-                if (data.error) {
-                    document.getElementById('resultado').textContent = 'Error: ' + data.error;
-                } else {
-                    let resultado = `
-                        <h1>Se ha creado el Usuario</h1>
+                if (data.success) {
+                    document.getElementById('resultado').innerHTML = `
+                        <h2 style="color: green;">Usuario Creado Exitosamente</h2>
                         <p>${data.mensaje}</p>
+                        <p>Redirigiendo al login...</p>
                     `;
-                    document.getElementById('resultado').innerHTML = resultado;
+                    // Redireccionar al login después de 2 segundos
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    document.getElementById('resultado').innerHTML = `
+                        <p style="color: red;">Error: ${data.error}</p>
+                    `;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                document.getElementById('resultado').textContent = 'Error al crear el usuario.';
+                document.getElementById('resultado').innerHTML = 
+                    '<p style="color: red;">Error al crear el usuario. Por favor, intente nuevamente.</p>';
             });
         }
-    </script>
+        </script>
 
 </body>
 </html>

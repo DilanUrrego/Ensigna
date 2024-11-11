@@ -1,7 +1,14 @@
+import os
+import sys
+from pathlib import Path
+
+# Añadir la ruta del proyecto al PYTHONPATH de manera más robusta
+project_root = Path(__file__).resolve().parents[2]
+sys.path.append(str(project_root))
 
 import psycopg2
 from psycopg2 import Error
-import SecretConfig
+from src.SecretConfig import SecretConfig
 
 class ControladorProductos:
     @staticmethod
@@ -40,7 +47,6 @@ class ControladorProductos:
                 connection.close()
         return False
 
-
     @staticmethod
     def editar_producto(producto_id, atributo, nuevo_valor):
         cursor, connection = ControladorProductos.obtener_cursor()
@@ -57,14 +63,13 @@ class ControladorProductos:
                 cursor.close()
                 connection.close()
 
-
     @staticmethod
     def eliminar_producto(producto_id):
         cursor, connection = ControladorProductos.obtener_cursor()
         if cursor:
             try:
-                query = f"DELETE FROM productos WHERE id = '{producto_id}'"
-                cursor.execute(query)
+                query = "DELETE FROM productos WHERE id = %s"
+                cursor.execute(query, (producto_id,))
                 connection.commit()
                 print("Producto eliminado correctamente.")
             except Exception as e:
@@ -79,27 +84,25 @@ class ControladorProductos:
         cursor, connection = ControladorProductos.obtener_cursor()
         if cursor:
             try:
-                query = "SELECT modelo, num_serie, tipo_producto FROM productos WHERE id = %s"
+                query = "SELECT id, tipo_producto, modelo, num_serie FROM productos WHERE id = %s"
                 cursor.execute(query, (id_producto,))
                 producto = cursor.fetchone()
                 
-                # Verificar si el producto fue encontrado
                 if producto:
                     return {
-                        'modelo': producto[0],
-                        'num_serie': producto[1],
-                        'tipo_producto': producto[2],
-                        'defecto': producto[3]
+                        'id': producto[0],
+                        'tipo_producto': producto[1],
+                        'modelo': producto[2],
+                        'num_serie': producto[3]
                     }
-                else:
-                    print("Producto no encontrado.")
-                    return None
+                return None
             except Exception as e:
                 print(f"Error al obtener el producto: {e}")
                 return None
             finally:
-                cursor.close()
-                connection.close()
+                if connection:
+                    cursor.close()
+                    connection.close()
         return None
     
     @staticmethod
@@ -107,21 +110,42 @@ class ControladorProductos:
         cursor, connection = ControladorProductos.obtener_cursor()
         if cursor:
             try:
-                # Construir la consulta SQL dinámicamente según los campos en update_data
-                fields = [f"{key} = %s" for key in update_data.keys()]
-                query = f"UPDATE productos SET {', '.join(fields)} WHERE id = %s"
+                # Construir la consulta SQL dinámicamente
+                update_fields = []
+                values = []
                 
-                # Valores a actualizar
-                values = list(update_data.values()) + [product_id]
+                # Mapeo de nombres de campos del formulario a nombres de columnas
+                field_mapping = {
+                    'tipo-producto': 'tipo_producto',
+                    'modelo': 'modelo',
+                    'num-serie': 'num_serie'
+                }
                 
-                # Ejecutar la consulta
+                # Solo incluir campos que tienen valor
+                for form_field, db_field in field_mapping.items():
+                    if form_field in update_data and update_data[form_field]:
+                        update_fields.append(f"{db_field} = %s")
+                        values.append(update_data[form_field])
+                
+                if not update_fields:  # Si no hay campos para actualizar
+                    return True
+                
+                # Añadir el ID al final de los valores
+                values.append(product_id)
+                
+                # Construir y ejecutar la consulta
+                query = f"UPDATE productos SET {', '.join(update_fields)} WHERE id = %s"
                 cursor.execute(query, values)
                 connection.commit()
-                print("Producto actualizado correctamente.")
+                print("Producto actualizado correctamente")
+                return True
             except Exception as e:
-                connection.rollback()
+                if connection:
+                    connection.rollback()
                 print(f"Error al actualizar el producto: {e}")
-                raise e
+                return False
             finally:
-                cursor.close()
-                connection.close()
+                if connection:
+                    cursor.close()
+                    connection.close()
+        return False
